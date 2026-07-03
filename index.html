@@ -1,271 +1,233 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Конструктор правовых актов</title>
-  <style>
-    /* ==========================================
-       СТИЛИ ИНТЕРФЕЙСА КОНСТРУКТОРА (.legal-constructor)
-       ========================================== */
-    .legal-constructor {
-      max-width: 1440px;
-      margin: 24px auto;
-      padding: 0 16px 32px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #13225E;
-      box-sizing: border-box;
-    }
-    .legal-constructor *, 
-    .legal-constructor *::before, 
-    .legal-constructor *::after {
-      box-sizing: border-box;
-    }
-    .legal-constructor__hero {
-      background: linear-gradient(135deg, #0B1B3D 0%, #13225E 55%, #1B3A6F 100%);
-      color: #FAF7F0;
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: 0 18px 40px rgba(11, 27, 61, 0.18);
-      margin-bottom: 20px;
-    }
-    .legal-constructor__hero-title {
-      margin: 0 0 8px;
-      font-size: 28px;
-      line-height: 1.15;
-      font-weight: 800;
-    }
-    .legal-constructor__hero-text {
-      margin: 0;
-      line-height: 1.6;
-      color: rgba(250, 247, 240, 0.92);
-      max-width: 980px;
-    }
-    .legal-constructor__layout {
-      display: grid;
-      grid-template-columns: minmax(360px, 520px) minmax(420px, 1fr);
-      gap: 20px;
-      align-items: start;
-    }
-    .legal-constructor__panel {
-      background: #FFFFFF;
-      border: 1px solid rgba(19, 34, 94, 0.12);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(11, 27, 61, 0.08);
-    }
-    .legal-constructor__panel-header {
-      padding: 18px 20px;
-      border-bottom: 1px solid rgba(19, 34, 94, 0.08);
-      background: linear-gradient(180deg, rgba(201, 162, 39, 0.08) 0%, #FFFFFF 100%);
-    }
-    .legal-constructor__panel-title {
-      margin: 0 0 6px;
-      font-size: 18px;
-      font-weight: 800;
-      color: #0B1B3D;
-    }
-    .legal-constructor__panel-text {
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.55;
-      color: #45506F;
-    }
-    .legal-constructor__panel-body {
-      padding: 20px;
-    }
-    .legal-constructor__grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-    .legal-constructor__field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .legal-constructor__field--full {
-      grid-column: 1 / -1;
-    }
-    .legal-constructor__label {
-      font-size: 13px;
-      font-weight: 700;
-      color: #13225E;
-    }
-    .legal-constructor__input, 
-    .legal-constructor__textarea, 
-    .legal-constructor__output {
-      width: 100%;
-      border: 1px solid rgba(19, 34, 94, 0.18);
-      border-radius: 12px;
-      background: #FFFFFF;
-      color: #1A1A2E;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-    .legal-constructor__input {
-      min-height: 44px;
-      padding: 10px 12px;
-      font-size: 14px;
-    }
-    .legal-constructor__textarea {
-      min-height: 110px;
-      padding: 12px;
-      font-size: 14px;
-      line-height: 1.6;
-      resize: vertical;
-    }
-    .legal-constructor__textarea--main {
-      min-height: 420px;
-      font-family: Consolas, "Liberation Mono", Menlo, monospace;
-      font-size: 14px;
-      line-height: 1.55;
-      white-space: pre-wrap;
-    }
-    .legal-constructor__output {
-      min-height: 320px;
-      padding: 12px;
-      font-size: 13px;
-      line-height: 1.55;
-      resize: vertical;
-      background: #FCFCFE;
-      font-family: Consolas, "Liberation Mono", Menlo, monospace;
-    }
-    .legal-constructor__input:focus, 
-    .legal-constructor__textarea:focus, 
-    .legal-constructor__output:focus {
-      outline: none;
-      border-color: rgba(201, 162, 39, 0.95);
-      box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.14);
-    }
-    .legal-constructor__small {
-      display: block;
-      margin-top: 4px;
-      font-size: 12px;
-      line-height: 1.45;
-      color: #65708D;
-    }
-    .legal-constructor__hint {
-      margin: 0 0 10px;
-      font-size: 13px;
-      line-height: 1.5;
-      color: #57627F;
-    }
-    .legal-constructor__actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 18px 0 14px;
-    }
-    .legal-constructor__button {
-      appearance: none;
-      border: none;
-      border-radius: 12px;
-      min-height: 46px;
-      padding: 0 18px;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-    }
-    .legal-constructor__button:hover {
-      transform: translateY(-1px);
-    }
-    .legal-constructor__button:active {
-      transform: translateY(0);
-    }
-    .legal-constructor__button--primary {
-      background: linear-gradient(135deg, #0B1B3D 0%, #13225E 100%);
-      color: #FAF7F0;
-      box-shadow: 0 10px 22px rgba(11, 27, 61, 0.22);
-    }
-    .legal-constructor__button--secondary {
-      background: linear-gradient(135deg, #C9A227 0%, #B87333 100%);
-      color: #FFFDF7;
-      box-shadow: 0 10px 22px rgba(184, 115, 51, 0.18);
-    }
-    .legal-constructor__button--ghost {
-      background: #EEF2FB;
-      color: #13225E;
-    }
-    .legal-constructor__status {
-      min-height: 22px;
-      margin-bottom: 12px;
-      font-size: 13px;
-      line-height: 1.45;
-      color: #4F5B7C;
-      padding: 8px 12px;
-      border-radius: 8px;
-      background: #F4F6FA;
-      word-wrap: break-word;
-    }
-    .legal-constructor__status[data-state="error"] {
-      color: #A33A22;
-      background: #FDF3F1;
-      font-weight: 700;
-    }
-    .legal-constructor__status[data-state="success"] {
-      color: #1F6F43;
-      background: #F1FDF5;
-      font-weight: 700;
-    }
-    .legal-constructor__preview-frame {
-      width: 100%;
-      min-height: 920px;
-      display: block;
-      border: none;
-      background: #ECE9E2;
-    }
-    @media (max-width: 1160px) {
-      .legal-constructor__layout {
-        grid-template-columns: 1fr;
-      }
-      .legal-constructor__preview-frame {
-        min-height: 760px;
-      }
-    }
-    @media (max-width: 720px) {
-      .legal-constructor {
-        margin: 12px auto;
-        padding: 0 10px 24px;
-      }
-      .legal-constructor__hero {
-        padding: 18px;
-        border-radius: 14px;
-      }
-      .legal-constructor__hero-title {
-        font-size: 22px;
-      }
-      .legal-constructor__grid {
-        grid-template-columns: 1fr;
-      }
-      .legal-constructor__panel-body, .legal-constructor__panel-header {
-        padding: 16px;
-      }
-      .legal-constructor__actions {
-        flex-direction: column;
-      }
-      .legal-constructor__button {
-        width: 100%;
-      }
-      .legal-constructor__preview-frame {
-        min-height: 620px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Конструктор правовых актов</title>
+<style>
+.legal-constructor {
+  max-width: 1440px;
+  margin: 24px auto;
+  padding: 0 16px 32px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #13225E;
+  box-sizing: border-box;
+}
+.legal-constructor *, .legal-constructor *::before, .legal-constructor *::after {
+  box-sizing: border-box;
+}
+.legal-constructor__hero {
+  background: linear-gradient(135deg, #0B1B3D 0%, #13225E 55%, #1B3A6F 100%);
+  color: #FAF7F0;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 18px 40px rgba(11,27,61,0.18);
+  margin-bottom: 20px;
+}
+.legal-constructor__hero-title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 800;
+}
+.legal-constructor__hero-text {
+  margin: 0;
+  line-height: 1.6;
+  color: rgba(250,247,240,0.92);
+}
+.legal-constructor__layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 520px) minmax(420px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.legal-constructor__panel {
+  background: #FFFFFF;
+  border: 1px solid rgba(19,34,94,0.12);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(11,27,61,0.08);
+}
+.legal-constructor__panel-header {
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(19,34,94,0.08);
+  background: linear-gradient(180deg, rgba(201,162,39,0.08) 0%, #FFFFFF 100%);
+}
+.legal-constructor__panel-title {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0B1B3D;
+}
+.legal-constructor__panel-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #45506F;
+}
+.legal-constructor__panel-body {
+  padding: 20px;
+}
+.legal-constructor__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.legal-constructor__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.legal-constructor__field--full {
+  grid-column: 1 / -1;
+}
+.legal-constructor__label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #13225E;
+}
+.legal-constructor__input,
+.legal-constructor__textarea,
+.legal-constructor__output {
+  width: 100%;
+  border: 1px solid rgba(19,34,94,0.18);
+  border-radius: 12px;
+  padding: 9px 13px;
+  font-size: 14px;
+  color: #13225E;
+  background: #F8FAFF;
+  outline: none;
+  transition: border-color 0.15s ease;
+  font-family: inherit;
+}
+.legal-constructor__input:focus,
+.legal-constructor__textarea:focus {
+  border-color: #C9A227;
+  background: #FFFDF7;
+}
+.legal-constructor__textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+.legal-constructor__textarea--main {
+  min-height: 180px;
+  font-size: 13px;
+  font-family: "Courier New", Courier, monospace;
+}
+.legal-constructor__output {
+  min-height: 160px;
+  font-size: 12px;
+  font-family: "Courier New", Courier, monospace;
+  background: #F0F4FF;
+  resize: vertical;
+  cursor: text;
+}
+.legal-constructor__small {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #65708D;
+}
+.legal-constructor__hint {
+  display: block;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #57627F;
+}
+.legal-constructor__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 14px;
+}
+.legal-constructor__button {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  border-radius: 12px;
+  min-height: 46px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  font-family: inherit;
+}
+.legal-constructor__button:hover { transform: translateY(-1px); }
+.legal-constructor__button:active { transform: translateY(0); }
+.legal-constructor__button--primary {
+  background: linear-gradient(135deg, #0B1B3D 0%, #13225E 100%);
+  color: #FAF7F0;
+  box-shadow: 0 10px 22px rgba(11,27,61,0.22);
+}
+.legal-constructor__button--secondary {
+  background: linear-gradient(135deg, #C9A227 0%, #B87333 100%);
+  color: #FFFDF7;
+  box-shadow: 0 10px 22px rgba(184,115,51,0.18);
+}
+.legal-constructor__button--ghost {
+  background: #EEF2FB;
+  color: #13225E;
+}
+.legal-constructor__status {
+  min-height: 22px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #4F5B7C;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #F4F6FA;
+  word-wrap: break-word;
+}
+.legal-constructor__status[data-state="error"] {
+  color: #A33A22;
+  background: #FDF3F1;
+  font-weight: 700;
+}
+.legal-constructor__status[data-state="success"] {
+  color: #1F6F43;
+  background: #F1FDF5;
+  font-weight: 700;
+}
+.legal-constructor__preview-frame {
+  width: 100%;
+  min-height: 920px;
+  display: block;
+  border: none;
+  background: #ECE9E2;
+}
+@media (max-width: 1160px) {
+  .legal-constructor__layout { grid-template-columns: 1fr; }
+  .legal-constructor__preview-frame { min-height: 760px; }
+}
+@media (max-width: 720px) {
+  .legal-constructor { margin: 12px auto; padding: 0 10px 24px; }
+  .legal-constructor__hero { padding: 18px; border-radius: 14px; }
+  .legal-constructor__hero-title { font-size: 22px; }
+  .legal-constructor__grid { grid-template-columns: 1fr; }
+  .legal-constructor__panel-body,
+  .legal-constructor__panel-header { padding: 16px; }
+  .legal-constructor__actions { flex-direction: column; }
+  .legal-constructor__button { width: 100%; }
+  .legal-constructor__preview-frame { min-height: 620px; }
+}
+</style>
 </head>
 <body>
 
-  <!-- Шаблоны форумного кода (изолированы от JS, чтобы исключить синтаксические ошибки) -->
-  <pre id="templateFonts" style="display:none; width:0; height:0; overflow:hidden;">
-<!-- Libre Baskerville (основной текст) -->
+<!-- Шаблон шрифтов: браузер не исполняет и не применяет содержимое -->
+<script type="text/plain" id="tplFonts">
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<!-- Poppins (заголовки, навигация, мета-данные) -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- Great Vibes (акцидентный курсив, подписи, motto) -->
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-  </pre>
+</script>
 
-  <pre id="templateStyle" style="display:none; width:0; height:0; overflow:hidden;">
+<!-- Шаблон стилей документа: браузер не применяет их к странице -->
+<script type="text/plain" id="tplStyle">
 <style>
 .ny-doc{max-width:800px;margin:0 auto;font-family:'Libre Baskerville',serif;color:#1A1A2E}
 .ny-doc-header{background:linear-gradient(135deg,#0B1B3D 0%,#13225E 50%,#1B3A6F 100%);border-radius:2px 2px 0 0;padding:30px;text-align:center;color:#FAF7F0;position:relative;overflow:hidden}
@@ -286,7 +248,7 @@
 .ny-doc-section-header{text-align:center;margin:25px 0 15px}
 .ny-doc-section-header-title{font-family:'Poppins',sans-serif;font-size:16px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#0B1B3D}
 .ny-doc-section-header-line{height:14px;margin-top:8px;background:linear-gradient(90deg,transparent 0%,#C9A227 50%,transparent 100%) repeat-x;position:relative}
-.ny-doc-section-header-line::after{content:"◆";color:#C9A227;font-size:10px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#FAF7F0;padding:0 6px}
+.ny-doc-section-header-line::after{content:"\25C6";color:#C9A227;font-size:10px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#FAF7F0;padding:0 6px}
 .ny-doc-paragraph{margin:0 0 12px}
 .ny-doc-section-text{font-size:15px;line-height:1.75;text-align:justify}
 .ny-doc-subsection-title{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:#13225E;text-transform:uppercase;letter-spacing:1.2px;margin:22px 0 12px;padding-left:14px;border-left:2px solid #A04A2E}
@@ -301,711 +263,573 @@
 .ny-doc-footer-motto{font-family:'Great Vibes',cursive;font-size:16px;color:#C9A227;margin-top:5px}
 .ny-doc-inline-user{font-family:'Poppins',sans-serif;font-size:.95em;color:#13225E;border-bottom:1px dotted #C9A227}
 .ny-doc-link{color:#13225E;text-decoration:none;border-bottom:1px solid rgba(201,163,39,.7)}
-.ny-doc-inline-rule{letter-spacing:1px;color:#B87333}
 @media(max-width:768px){.ny-doc{max-width:100%}.ny-doc-header{padding:22px 18px}.ny-doc-body{padding:20px}.ny-doc-title{font-size:18px}.ny-doc-meta{font-size:11px}.ny-doc-section-text,.ny-doc-article-text{font-size:14px}.ny-doc-signature{flex-direction:column}.ny-doc-signature-block{text-align:left}}
 </style>
-  </pre>
+</script>
 
-  <div class="legal-constructor">
-    <!-- Конструктор: Шапка -->
-    <div class="legal-constructor__hero">
-      <h1 class="legal-constructor__hero-title">Конструктор правовых актов</h1>
-      <p class="legal-constructor__hero-text">
-        Самодостаточный HTML-конструктор для подготовки статичного форумного кода с обязательной обёрткой <code>[PARSEHTML]...[/PARSEHTML]</code>, встроенными стилями документа, предпросмотром и сохранением BB-кодов.
-      </p>
-    </div>
+<!-- ================================
+     ИНТЕРФЕЙС КОНСТРУКТОРА
+     ================================ -->
+<div class="legal-constructor">
 
-    <div class="legal-constructor__layout">
-      <!-- Конструктор: Левая Колонка Формы -->
-      <section class="legal-constructor__panel">
-        <div class="legal-constructor__panel-header">
-          <h2 class="legal-constructor__panel-title">Параметры документа</h2>
-          <p class="legal-constructor__panel-text">
-            Первая непустая строка основного текста станет заголовком раздела. Строки вида <code>1.</code>, <code>2.</code>, <code>3.</code> автоматически оформляются как пункты.
-          </p>
-        </div>
-        <div class="legal-constructor__panel-body">
-          <div class="legal-constructor__grid">
-            <label class="legal-constructor__field">
-              <span class="legal-constructor__label">Вид акта</span>
-              <input id="actType" class="legal-constructor__input" type="text" value="Решение">
-            </label>
-            <label class="legal-constructor__field">
-              <span class="legal-constructor__label">Дата</span>
-              <input id="actDate" class="legal-constructor__input" type="text" placeholder="01.01.2026">
-            </label>
-            <label class="legal-constructor__field">
-              <span class="legal-constructor__label">Номер дела / акта</span>
-              <input id="actNumber" class="legal-constructor__input" type="text" value="№ 01-2026/А">
-            </label>
-            <label class="legal-constructor__field">
-              <span class="legal-constructor__label">Место принятия</span>
-              <input id="actPlace" class="legal-constructor__input" type="text" value="Москва">
-            </label>
-            <label class="legal-constructor__field legal-constructor__field--full">
-              <span class="legal-constructor__label">Наименование суда / органа</span>
-              <input id="courtName" class="legal-constructor__input" type="text" value="Верховный суд государственного образования">
-            </label>
-            <label class="legal-constructor__field legal-constructor__field--full">
-              <span class="legal-constructor__label">Состав суда / коллегии</span>
-              <textarea id="courtPanel" class="legal-constructor__textarea" placeholder="Председательствующий ..., судьи ..., секретарь ...">Председательствующий судья Иванов И.И., члены судебной коллегии Петров П.П. и Сидоров С.С.</textarea>
-            </label>
-            <label class="legal-constructor__field">
-              <span class="legal-constructor__label">Судья / подписант</span>
-              <input id="signatory" class="legal-constructor__input" type="text" value="И.И. Иванов">
-            </label>
-            <label class="legal-constructor__field">
-              <span class="legal-constructor__label">Статус</span>
-              <input id="actStatus" class="legal-constructor__input" type="text" value="Вступило в силу">
-            </label>
-            <label class="legal-constructor__field legal-constructor__field--full">
-              <span class="legal-constructor__label">URL гербовой печати</span>
-              <input id="sealUrl" class="legal-constructor__input" type="url" value="">
-              <span class="legal-constructor__small">
-                Если оставить пустым, применится встроенная векторная печать по умолчанию.
-              </span>
-            </label>
-            <label class="legal-constructor__field">
-              <span class="legal-constructor__label">Метка футера</span>
-              <input id="footerLabel" class="legal-constructor__input" type="text" value="Официальный судебный акт">
-            </label>
-            <label class="legal-constructor__field">
-              <span class="legal-constructor__label">Motto</span>
-              <input id="footerMotto" class="legal-constructor__input" type="text" value="Lex et Ordo">
-            </label>
-            <label class="legal-constructor__field legal-constructor__field--full">
-              <span class="legal-constructor__label">Основной текст документа</span>
-              <textarea id="actText" class="legal-constructor__textarea legal-constructor__textarea--main" spellcheck="false" placeholder="Введите текст..."></textarea>
-            </label>
-          </div>
-
-          <div class="legal-constructor__actions">
-            <button id="generateBtn" class="legal-constructor__button legal-constructor__button--primary" type="button">Сгенерировать</button>
-            <button id="previewBtn" class="legal-constructor__button legal-constructor__button--secondary" type="button">Предпросмотр</button>
-            <button id="copyBtn" class="legal-constructor__button legal-constructor__button--ghost" type="button">Скопировать HTML-код</button>
-          </div>
-
-          <div id="statusBox" class="legal-constructor__status" aria-live="polite">Готов к работе. Заполните данные.</div>
-
-          <label class="legal-constructor__field legal-constructor__field--full">
-            <span class="legal-constructor__label">Итоговый HTML-код для форума</span>
-            <span class="legal-constructor__hint">После клика код выделяется автоматически для ручного копирования.</span>
-            <textarea id="outputCode" class="legal-constructor__output" readonly spellcheck="false"></textarea>
-          </label>
-        </div>
-      </section>
-
-      <!-- Конструктор: Правая Колонка Предпросмотра -->
-      <section class="legal-constructor__panel">
-        <div class="legal-constructor__panel-header">
-          <h2 class="legal-constructor__panel-title">Предпросмотр документа</h2>
-          <p class="legal-constructor__panel-text">Визуальный рендер (без BB-кодов и обёрток)</p>
-        </div>
-        <iframe id="previewFrame" class="legal-constructor__preview-frame" title="Предпросмотр"></iframe>
-      </section>
-    </div>
+  <div class="legal-constructor__hero">
+    <h1 class="legal-constructor__hero-title">Конструктор правовых актов</h1>
+    <p class="legal-constructor__hero-text">
+      Самодостаточный HTML-конструктор для подготовки статичного форумного кода с обязательной обёрткой
+      <code>[PARSEHTML]...[/PARSEHTML]</code>, встроенными стилями, предпросмотром и поддержкой BB-кодов.
+    </p>
   </div>
 
-  <script>
-    (function () {
-      "use strict";
+  <div class="legal-constructor__layout">
 
-      // Глобальный перехватчик ошибок для визуальной отладки прямо в интерфейсе
-      window.onerror = function (msg, url, line) {
-        var status = document.getElementById("statusBox");
-        if (status) {
-          status.textContent = "Критическая ошибка JS: " + msg + " (Строка: " + line + ")";
-          status.setAttribute("data-state", "error");
-        }
-        return false;
-      };
+    <!-- Левая колонка: форма -->
+    <section class="legal-constructor__panel">
+      <div class="legal-constructor__panel-header">
+        <h2 class="legal-constructor__panel-title">Параметры документа</h2>
+        <p class="legal-constructor__panel-text">
+          Первая непустая строка основного текста станет заголовком раздела.
+          Строки вида <code>1.</code>, <code>2.</code> оформляются как пункты.
+        </p>
+      </div>
+      <div class="legal-constructor__panel-body">
+        <div class="legal-constructor__grid">
 
-      // Векторная печать (Герб) по умолчанию
-      var defaultSealSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">' +
-        '<defs>' +
-        '<linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
-        '<stop offset="0%" stop-color="#C9A227"/>' +
-        '<stop offset="100%" stop-color="#B87333"/>' +
-        '</linearGradient>' +
-        '</defs>' +
-        '<circle cx="100" cy="100" r="92" fill="#0B1B3D" stroke="url(#g)" stroke-width="10"/>' +
-        '<circle cx="100" cy="100" r="72" fill="none" stroke="rgba(201,162,39,0.65)" stroke-width="3"/>' +
-        '<path d="M100 38l18 18h20v26c0 34-18 52-38 65-20-13-38-31-38-65V56h20l18-18z" fill="url(#g)"/>' +
-        '<path d="M100 61l8 16 18 3-13 13 3 18-16-8-16 8 3-18-13-13 18-3 8-16z" fill="#0B1B3D"/>' +
-        '<text x="100" y="168" text-anchor="middle" font-size="16" font-family="Georgia, serif" fill="#C9A227">SEAL</text>' +
-        '</svg>';
+          <label class="legal-constructor__field">
+            <span class="legal-constructor__label">Вид акта</span>
+            <input id="actType" class="legal-constructor__input" type="text" value="РЕШЕНИЕ СУДЕБНОЙ КОЛЛЕГИИ">
+          </label>
 
-      var DEFAULT_SEAL_URL = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(defaultSealSvg);
+          <label class="legal-constructor__field">
+            <span class="legal-constructor__label">Дата</span>
+            <input id="actDate" class="legal-constructor__input" type="text" placeholder="дд.мм.гггг">
+          </label>
 
-      // Глобальный объект для элементов управления
-      var elem = {};
+          <label class="legal-constructor__field">
+            <span class="legal-constructor__label">Номер дела / акта</span>
+            <input id="actNumber" class="legal-constructor__input" type="text" value="А-001/2025">
+          </label>
 
-      function trim(str) {
-        return String(str || "").replace(/^\s+|\s+$/g, "");
-      }
+          <label class="legal-constructor__field">
+            <span class="legal-constructor__label">Место принятия</span>
+            <input id="actPlace" class="legal-constructor__input" type="text" value="г. Нью-Йорк">
+          </label>
 
-      function formatToday() {
-        var d = new Date();
-        var day = d.getDate();
-        var month = d.getMonth() + 1;
-        var year = d.getFullYear();
-        if (day < 10) day = "0" + day;
-        if (month < 10) month = "0" + month;
-        return day + "." + month + "." + year;
-      }
+          <label class="legal-constructor__field legal-constructor__field--full">
+            <span class="legal-constructor__label">Наименование суда / органа</span>
+            <input id="courtName" class="legal-constructor__input" type="text" value="ВЕРХОВНЫЙ СУД">
+          </label>
 
-      // Безопасное получение элементов по ID
-      function get(id) {
-        var el = document.getElementById(id);
-        if (!el) {
-          throw new Error("Не найден обязательный HTML-элемент: #" + id);
-        }
-        return el;
-      }
+          <label class="legal-constructor__field legal-constructor__field--full">
+            <span class="legal-constructor__label">Состав суда / коллегии</span>
+            <textarea id="courtPanel" class="legal-constructor__textarea">Председательствующий судья Иванов И.И., члены коллегии Петров П.П. и Сидоров С.С.</textarea>
+          </label>
 
-      function init() {
-        // Заполнение глобальной коллекции элементов
-        elem.actType = get("actType");
-        elem.actDate = get("actDate");
-        elem.actNumber = get("actNumber");
-        elem.actPlace = get("actPlace");
-        elem.courtName = get("courtName");
-        elem.courtPanel = get("courtPanel");
-        elem.signatory = get("signatory");
-        elem.actStatus = get("actStatus");
-        elem.sealUrl = get("sealUrl");
-        elem.footerLabel = get("footerLabel");
-        elem.footerMotto = get("footerMotto");
-        elem.actText = get("actText");
-        elem.outputCode = get("outputCode");
-        elem.previewFrame = get("previewFrame");
-        elem.statusBox = get("statusBox");
-        elem.generateBtn = get("generateBtn");
-        elem.previewBtn = get("previewBtn");
-        elem.copyBtn = get("copyBtn");
+          <label class="legal-constructor__field legal-constructor__field--full">
+            <span class="legal-constructor__label">Судья / подписант</span>
+            <input id="signatory" class="legal-constructor__input" type="text" value="Председатель коллегии">
+          </label>
 
-        // Установка дефолтных значений, если поля пустые
-        if (!trim(elem.actDate.value)) {
-          elem.actDate.value = formatToday();
-        }
+          <label class="legal-constructor__field">
+            <span class="legal-constructor__label">Статус</span>
+            <input id="actStatus" class="legal-constructor__input" type="text" value="Вступило в силу">
+          </label>
 
-        // Демо-данные в текстовом поле
-        if (!trim(elem.actText.value)) {
-          elem.actText.value = [
-            "УСТАНОВИЛ И ПОСТАНОВИЛ:",
-            "Судебная коллегия, всесторонне исследовав представленные материалы дела, пришла к выводу о полном соответствии требований заявителя действующему регламенту. Использование BB-кодов поддерживается в штатном режиме, например: [B]жирный текст[/B], [I]курсивный текст[/I] или упоминания участников: [USER=142]Судья Смирнов[/USER].",
-            "",
-            "Рассмотрев предоставленные доказательства стороны обвинения и защиты, судебный орган определил следующий порядок исполнения правового акта:",
-            "",
-            "1. Признать требования заявителя правомерными и подлежащими удовлетворению в полном объёме судебных издержек.",
-            "2. Направить настоящее мотивированное решение всем заинтересованным лицам в установленный законом срок.",
-            "3. Решение вступает в законную силу немедленно с момента официального оглашения и публикации."
-          ].join("\n");
-        }
+          <label class="legal-constructor__field">
+            <span class="legal-constructor__label">Motto</span>
+            <input id="footerMotto" class="legal-constructor__input" type="text" value="Lex et Ordo">
+          </label>
 
-        // Привязка обработчиков событий
-        elem.outputCode.onclick = function () {
-          elem.outputCode.focus();
-          elem.outputCode.select();
-        };
+          <label class="legal-constructor__field legal-constructor__field--full">
+            <span class="legal-constructor__label">URL гербовой печати</span>
+            <input id="sealUrl" class="legal-constructor__input" type="url" placeholder="https://...">
+            <span class="legal-constructor__small">Оставьте пустым — применится встроенная SVG-печать.</span>
+          </label>
 
-        elem.generateBtn.onclick = handleGenerate;
-        elem.previewBtn.onclick = handlePreview;
-        elem.copyBtn.onclick = handleCopy;
+          <label class="legal-constructor__field legal-constructor__field--full">
+            <span class="legal-constructor__label">Метка футера</span>
+            <input id="footerLabel" class="legal-constructor__input" type="text" value="Официальный судебный акт">
+          </label>
 
-        // Генерация первого пустого/базового превью при запуске
-        handlePreview();
-      }
+          <label class="legal-constructor__field legal-constructor__field--full">
+            <span class="legal-constructor__label">Основной текст документа</span>
+            <textarea id="actText" class="legal-constructor__textarea legal-constructor__textarea--main" spellcheck="false" placeholder="Введите текст документа..."></textarea>
+          </label>
 
-      function getFormValues() {
-        return {
-          actType: elem.actType.value,
-          actDate: elem.actDate.value,
-          actNumber: elem.actNumber.value,
-          actPlace: elem.actPlace.value,
-          courtName: elem.courtName.value,
-          courtPanel: elem.courtPanel.value,
-          signatory: elem.signatory.value,
-          actStatus: elem.actStatus.value,
-          sealUrl: trim(elem.sealUrl.value) ? elem.sealUrl.value : DEFAULT_SEAL_URL,
-          footerLabel: elem.footerLabel.value,
-          footerMotto: elem.footerMotto.value,
-          actText: elem.actText.value
-        };
-      }
+        </div>
 
-      function validate(values) {
-        if (!values || !trim(values.actText)) {
-          setStatus("Ошибка: Поле основного текста не может быть пустым.", "error");
-          alert("Пожалуйста, заполните поле 'Основной текст документа'.");
-          elem.actText.focus();
-          return false;
-        }
-        return true;
-      }
+        <div class="legal-constructor__actions">
+          <button id="btnGenerate" class="legal-constructor__button legal-constructor__button--primary" type="button">Сгенерировать</button>
+          <button id="btnPreview" class="legal-constructor__button legal-constructor__button--secondary" type="button">Предпросмотр</button>
+          <button id="btnCopy" class="legal-constructor__button legal-constructor__button--ghost" type="button">Скопировать HTML-код</button>
+        </div>
 
-      function setStatus(text, state) {
-        elem.statusBox.textContent = text;
-        elem.statusBox.setAttribute("data-state", state || "");
-      }
+        <div id="statusBox" class="legal-constructor__status">Готов к работе. Заполните данные.</div>
 
-      /* ==========================================
-         ФУНКЦИИ ОБРАБОТКИ ФОРУМНЫХ BB-КОДОВ И HTML
-         ========================================== */
-      function escapeHtml(str) {
-        return String(str || "")
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#39;");
-      }
+        <label class="legal-constructor__field">
+          <span class="legal-constructor__label">Итоговый HTML-код для форума</span>
+          <span class="legal-constructor__hint">Нажмите на поле — код выделится целиком для ручного копирования.</span>
+          <textarea id="outputCode" class="legal-constructor__output" readonly spellcheck="false"></textarea>
+        </label>
 
-      function escapeAttribute(str) {
-        return String(str || "")
-          .replace(/&/g, "&amp;")
-          .replace(/"/g, "&quot;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
-      }
+      </div>
+    </section>
 
-      function tokenizeBbCodes(text) {
-        var pattern = /
-\[USER=[^\]]+\][\s\S]*?
-\[\/USER\]|
-\[URL(?:=[^\]]+)?\][\s\S]*?
-\[\/URL\]|
-\[B\][\s\S]*?
-\[\/B\]|
-\[I\][\s\S]*?
-\[\/I\]|
-\[U\][\s\S]*?
-\[\/U\]|
-\[S\][\s\S]*?
-\[\/S\]|
-\[COLOR=[^\]]+\][\s\S]*?
-\[\/COLOR\]|
-\[SIZE=[^\]]+\][\s\S]*?
-\[\/SIZE\]|
-\[FONT=[^\]]+\][\s\S]*?
-\[\/FONT\]|
-\[QUOTE(?:=[^\]]+)?\][\s\S]*?
-\[\/QUOTE\]|
-\[CENTER\][\s\S]*?
-\[\/CENTER\]|
-\[LEFT\][\s\S]*?
-\[\/LEFT\]|
-\[RIGHT\][\s\S]*?
-\[\/RIGHT\]|
-\[SPOILER(?:=[^\]]+)?\][\s\S]*?
-\[\/SPOILER\]|
-\[(?:BR|HR)\]|
-\[\/?[A-Z]+(?:=[^\]]+)?\]/gi;
-        var parts = [];
-        var lastIndex = 0;
-        var match;
+    <!-- Правая колонка: предпросмотр -->
+    <section class="legal-constructor__panel">
+      <div class="legal-constructor__panel-header">
+        <h2 class="legal-constructor__panel-title">Предпросмотр документа</h2>
+        <p class="legal-constructor__panel-text">Визуальный рендер без обёртки [PARSEHTML]</p>
+      </div>
+      <iframe id="previewFrame" class="legal-constructor__preview-frame" title="Предпросмотр"></iframe>
+    </section>
 
-        while ((match = pattern.exec(text)) !== null) {
-          if (match.index > lastIndex) {
-            parts.push({ type: "text", value: text.slice(lastIndex, match.index) });
-          }
-          parts.push({ type: "bb", value: match[0] });
-          lastIndex = pattern.lastIndex;
-        }
-        if (lastIndex < text.length) {
-          parts.push({ type: "text", value: text.slice(lastIndex) });
-        }
-        return parts;
-      }
+  </div>
+</div>
 
-      function forumizeText(text) {
-        var tokens = tokenizeBbCodes(String(text || ""));
-        var result = [];
-        for (var i = 0; i < tokens.length; i++) {
-          if (tokens[i].type === "bb") {
-            result.push("[/PARSEHTML]" + tokens[i].value + "[PARSEHTML]");
-          } else {
-            result.push(escapeHtml(tokens[i].value));
-          }
-        }
-        return result.join("");
-      }
+<script>
+(function () {
+  "use strict";
 
-      function previewizeText(text) {
-        var html = escapeHtml(String(text || ""));
-        html = html.replace(/
-\[USER=([^\]]+)\]([\s\S]*?)
-\[\/USER\]/gi, '<span class="ny-doc-inline-user">@$2</span>');
-        html = html.replace(/
+  /* Перехват ошибок — выводит сообщение прямо в интерфейс */
+  window.onerror = function (msg, src, line) {
+    var box = document.getElementById("statusBox");
+    if (box) {
+      box.textContent = "JS-ошибка на строке " + line + ": " + msg;
+      box.setAttribute("data-state", "error");
+    }
+    return false;
+  };
+
+  /* ---- Константы ---- */
+
+  var DEFAULT_SEAL = "data:image/svg+xml," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">' +
+    '<circle cx="50" cy="50" r="46" fill="none" stroke="#C9A227" stroke-width="3"/>' +
+    '<circle cx="50" cy="50" r="37" fill="none" stroke="#C9A227" stroke-width="1.5"/>' +
+    '<circle cx="50" cy="50" r="28" fill="none" stroke="#C9A227" stroke-width="1"/>' +
+    '<text x="50" y="45" text-anchor="middle" font-size="9" font-family="serif" fill="#C9A227" font-weight="bold">ВЕРХОВНЫЙ</text>' +
+    '<text x="50" y="57" text-anchor="middle" font-size="9" font-family="serif" fill="#C9A227" font-weight="bold">СУД</text>' +
+    '</svg>'
+  );
+
+  /* ---- Ссылки на элементы DOM ---- */
+
+  var E = {
+    actType:      document.getElementById("actType"),
+    actDate:      document.getElementById("actDate"),
+    actNumber:    document.getElementById("actNumber"),
+    actPlace:     document.getElementById("actPlace"),
+    courtName:    document.getElementById("courtName"),
+    courtPanel:   document.getElementById("courtPanel"),
+    signatory:    document.getElementById("signatory"),
+    actStatus:    document.getElementById("actStatus"),
+    sealUrl:      document.getElementById("sealUrl"),
+    footerLabel:  document.getElementById("footerLabel"),
+    footerMotto:  document.getElementById("footerMotto"),
+    actText:      document.getElementById("actText"),
+    btnGenerate:  document.getElementById("btnGenerate"),
+    btnPreview:   document.getElementById("btnPreview"),
+    btnCopy:      document.getElementById("btnCopy"),
+    statusBox:    document.getElementById("statusBox"),
+    outputCode:   document.getElementById("outputCode"),
+    previewFrame: document.getElementById("previewFrame"),
+    tplFonts:     document.getElementById("tplFonts"),
+    tplStyle:     document.getElementById("tplStyle")
+  };
+
+  /* ---- Утилиты ---- */
+
+  function pad2(n) {
+    return (n < 10 ? "0" : "") + n;
+  }
+
+  function trim(s) {
+    return String(s || "").replace(/^\s+|\s+$/, "").replace(/^\s+|\s+$/g, "");
+  }
+
+  function escHtml(s) {
+    return String(s || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function escAttr(s) {
+    return String(s || "")
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function todayStr() {
+    var d = new Date();
+    return pad2(d.getDate()) + "." + pad2(d.getMonth() + 1) + "." + d.getFullYear();
+  }
+
+  function setStatus(msg, state) {
+    E.statusBox.textContent = msg;
+    E.statusBox.setAttribute("data-state", state || "");
+  }
+
+  /* ---- BB-коды → HTML ---- */
+
+  function bb2html(text) {
+    var s = escHtml(text);
+    s = s.replace(/
 \[B\]([\s\S]*?)
-\[\/B\]/gi, '<strong>$1</strong>');
-        html = html.replace(/
+\[\/B\]/gi,   "<strong>$1</strong>");
+    s = s.replace(/
 \[I\]([\s\S]*?)
-\[\/I\]/gi, '<em>$1</em>');
-        html = html.replace(/
+\[\/I\]/gi,   "<em>$1</em>");
+    s = s.replace(/
 \[U\]([\s\S]*?)
-\[\/U\]/gi, '<u>$1</u>');
-        html = html.replace(/
+\[\/U\]/gi,   "<u>$1</u>");
+    s = s.replace(/
 \[S\]([\s\S]*?)
-\[\/S\]/gi, '<s>$1</s>');
-        html = html.replace(/
+\[\/S\]/gi,   "<s>$1</s>");
+    s = s.replace(/
+\[USER=[^\]]+\]([\s\S]*?)
+\[\/USER\]/gi,
+      '<span class="ny-doc-inline-user">$1</span>');
+    s = s.replace(/
 \[URL=([^\]]+)\]([\s\S]*?)
-\[\/URL\]/gi, '<a class="ny-doc-link" href="$1" target="_blank" rel="noopener">$2</a>');
-        html = html.replace(/
+\[\/URL\]/gi,
+      '<a class="ny-doc-link" href="$1" target="_blank" rel="noopener">$2</a>');
+    s = s.replace(/
 \[URL\]([\s\S]*?)
-\[\/URL\]/gi, '<a class="ny-doc-link" href="$1" target="_blank" rel="noopener">$1</a>');
-        html = html.replace(/
-\[BR\]/gi, '<br>');
-        html = html.replace(/
-\[HR\]/gi, '<span class="ny-doc-inline-rule">────────────</span>');
-        return html;
+\[\/URL\]/gi,
+      '<a class="ny-doc-link" href="$1" target="_blank" rel="noopener">$1</a>');
+    s = s.replace(/
+\[COLOR=[^\]]+\]([\s\S]*?)
+\[\/COLOR\]/gi, "$1");
+    s = s.replace(/
+\[SIZE=[^\]]+\]([\s\S]*?)
+\[\/SIZE\]/gi,   "$1");
+    s = s.replace(/
+\[BR\]/gi, "<br>");
+    s = s.replace(/
+\[HR\]/gi,
+      '<hr style="border:none;border-top:1px solid #C9A227;margin:10px 0;">');
+    s = s.replace(/
+\[[A-Za-z\/][^\]]*\]/g, "");
+    return s;
+  }
+
+  /* ---- Парсинг текста документа ---- */
+
+  function parseText(input) {
+    var lines = String(input || "").replace(/\r/g, "").split("\n");
+    var sectionHeader = "";
+    var blocks = [];
+    var started = false;
+    var artNum = null;
+    var artLines = [];
+
+    function flushArt() {
+      if (artNum !== null) {
+        blocks.push({ type: "article", n: artNum, text: trim(artLines.join(" ")) });
+        artNum = null;
+        artLines = [];
+      }
+    }
+
+    function isSub(t) {
+      if (!t) return false;
+      if (t.charAt(t.length - 1) === ":") return true;
+      var lo = t.toLowerCase();
+      var kw = [
+        "установил", "постановил", "определил", "рассмотрев",
+        "мотивированная", "резолютивная", "обстоятельства", "доводы"
+      ];
+      for (var k = 0; k < kw.length; k++) {
+        if (lo.indexOf(kw[k]) === 0) return true;
+      }
+      return false;
+    }
+
+    for (var i = 0; i < lines.length; i++) {
+      var raw = lines[i];
+      var t = trim(raw);
+
+      if (!started) {
+        if (t) { sectionHeader = t; started = true; }
+        continue;
       }
 
-      function renderContentText(text, mode) {
-        return (mode === "forum") ? forumizeText(text) : previewizeText(text);
+      if (!t) { flushArt(); continue; }
+
+      var mArt = raw.match(/^\s*(\d+)\.\s+([\s\S]*)/);
+      if (mArt) {
+        flushArt();
+        artNum = mArt[1];
+        artLines = [trim(mArt[2])];
+        continue;
       }
 
-      /* ==========================================
-         Парсинг структуры основного текста акта
-         ========================================== */
-      function parseDocumentStructure(inputText) {
-        var normalizedValue = String(inputText || "").replace(/\r/g, "");
-        var rawLines = normalizedValue.split("\n");
-        var activeLines = [];
-        var i;
-
-        // Отбрасываем пустые строки сверху
-        var foundContent = false;
-        for (i = 0; i < rawLines.length; i++) {
-          if (trim(rawLines[i]) !== "" || foundContent) {
-            foundContent = true;
-            activeLines.push(rawLines[i]);
-          }
-        }
-
-        if (!activeLines.length) {
-          return { sectionHeader: "", blocks: [] };
-        }
-
-        // Первая непустая строка — это заголовок раздела
-        var sectionHeader = trim(activeLines[0]);
-        var bodyLines = activeLines.slice(1);
-        var blocks = [];
-        var currentParagraphBuffer = [];
-        var activeArticle = null;
-        var articleParagraphs = [];
-        var articleCurrentParagraph = [];
-
-        function isSectionTrigger(line) {
-          return /:\s*$/.test(line) || /^(мотивированная|резолютивная|установил|постановил|определил|рассмотрев|обстоятельства дела|доводы сторон)/i.test(line);
-        }
-
-        function flushParagraph() {
-          if (currentParagraphBuffer.length) {
-            blocks.push({
-              type: "paragraph",
-              text: trim(currentParagraphBuffer.join(" "))
-            });
-            currentParagraphBuffer = [];
-          }
-        }
-
-        function flushArticleParagraph() {
-          if (articleCurrentParagraph.length) {
-            articleParagraphs.push(trim(articleCurrentParagraph.join(" ")));
-            articleCurrentParagraph = [];
-          }
-        }
-
-        function flushArticle() {
-          if (activeArticle) {
-            flushArticleParagraph();
-            blocks.push({
-              type: "article",
-              number: activeArticle.number,
-              paragraphs: articleParagraphs.slice()
-            });
-            activeArticle = null;
-            articleParagraphs = [];
-            articleCurrentParagraph = [];
-          }
-        }
-
-        for (i = 0; i < bodyLines.length; i++) {
-          var line = trim(bodyLines[i]);
-
-          if (line === "") {
-            if (activeArticle) {
-              flushArticleParagraph();
-            } else {
-              flushParagraph();
-            }
-            continue;
-          }
-
-          // Поиск структурированных законов/статей (например, "1.", "2.")
-          var articleMatch = line.match(/^(\d+)\.\s+(.*)$/);
-          if (articleMatch) {
-            flushParagraph();
-            flushArticle();
-            activeArticle = { number: articleMatch[1] };
-            articleCurrentParagraph = [articleMatch[2]];
-            continue;
-          }
-
-          // Поиск внутренних подзаголовков разделов
-          if (isSectionTrigger(line) && !/^\d+\.\s+/.test(line)) {
-            flushParagraph();
-            flushArticle();
-            blocks.push({
-              type: "subheader",
-              text: line.replace(/:\s*$/, "")
-            });
-            continue;
-          }
-
-          // Обычное накопление
-          if (activeArticle) {
-            articleCurrentParagraph.push(line);
-          } else {
-            currentParagraphBuffer.push(line);
-          }
-        }
-
-        flushParagraph();
-        flushArticle();
-
-        return {
-          sectionHeader: sectionHeader,
-          blocks: blocks
-        };
+      if (artNum !== null) {
+        artLines.push(t);
+        continue;
       }
 
-      function buildParsedBodyHtml(blocks, mode) {
-        if (!blocks || !blocks.length) {
-          return '<p class="ny-doc-paragraph ny-doc-section-text">' + renderContentText("Текст акта пуст.", mode) + '</p>';
-        }
-
-        var htmlBuffer = [];
-        for (var i = 0; i < blocks.length; i++) {
-          var b = blocks[i];
-          if (b.type === "paragraph") {
-            htmlBuffer.push('<p class="ny-doc-paragraph ny-doc-section-text">' + renderContentText(b.text, mode) + '</p>');
-          } else if (b.type === "subheader") {
-            htmlBuffer.push('<div class="ny-doc-subsection-title">' + renderContentText(b.text, mode) + ':</div>');
-          } else if (b.type === "article") {
-            htmlBuffer.push('<div class="ny-doc-article">');
-            htmlBuffer.push('<div class="ny-doc-article-number">Пункт ' + escapeHtml(b.number) + '</div>');
-            htmlBuffer.push('<div class="ny-doc-article-body">');
-            if (b.paragraphs && b.paragraphs.length) {
-              for (var j = 0; j < b.paragraphs.length; j++) {
-                htmlBuffer.push('<p class="ny-doc-paragraph ny-doc-article-text">' + renderContentText(b.paragraphs[j], mode) + '</p>');
-              }
-            } else {
-              htmlBuffer.push('<p class="ny-doc-paragraph ny-doc-article-text"></p>');
-            }
-            htmlBuffer.push('</div></div>');
-          }
-        }
-        return htmlBuffer.join("");
+      if (isSub(t)) {
+        blocks.push({ type: "sub", text: t.replace(/:$/, "") });
+        continue;
       }
 
-      /* ==========================================
-         Сборка дерева документа
-         ========================================== */
-      function renderMonolithFragment(values, mode) {
-        var parsed = parseDocumentStructure(values.actText);
-        var sectionHeader = trim(parsed.sectionHeader) ? parsed.sectionHeader : "РАЗДЕЛ ДОКУМЕНТА";
+      blocks.push({ type: "p", text: t });
+    }
 
-        var compositionCard = "";
-        if (trim(values.courtPanel)) {
-          var rawPanelTextCleaned = String(values.courtPanel).replace(/\r/g, "").replace(/\n+/g, " [BR] ");
-          compositionCard = '<div class="ny-doc-info-card">' +
-            '<div class="ny-doc-section-title">Состав суда / коллегии</div>' +
-            '<p class="ny-doc-paragraph ny-doc-section-text">' + renderContentText(rawPanelTextCleaned, mode) + '</p>' +
-            '</div>';
-        }
+    flushArt();
+    return { hdr: sectionHeader, blocks: blocks };
+  }
 
-        return [
-          '<div class="ny-doc">',
-          '<div class="ny-doc-header"><div class="ny-doc-header-content">',
-          '<img class="ny-doc-seal" src="' + escapeAttribute(values.sealUrl) + '" alt="Seal">',
-          '<div class="ny-doc-pretitle">' + renderContentText(values.courtName, mode) + '</div>',
-          '<div class="ny-doc-title">' + renderContentText(values.actType, mode) + '</div>',
-          '<div class="ny-doc-subtitle">Case №' + renderContentText(values.actNumber, mode) + '</div>',
-          '</div></div>',
-          '<div class="ny-doc-stripe"></div>',
-          '<div class="ny-doc-body">',
-          '<div class="ny-doc-meta">',
-          '<span class="ny-doc-meta-item"><b>Дело:</b> ' + renderContentText(values.actNumber, mode) + '</span>',
-          '<span class="ny-doc-meta-item"><b>Дата:</b> ' + renderContentText(values.actDate, mode) + '</span>',
-          '<span class="ny-doc-meta-item"><b>Статус:</b> ' + renderContentText(values.actStatus, mode) + '</span>',
-          '</div>',
-          compositionCard,
-          '<div class="ny-doc-section-header">',
-          '<div class="ny-doc-section-header-title">' + renderContentText(sectionHeader, mode) + '</div>',
-          '<div class="ny-doc-section-header-line"></div>',
-          '</div>',
-          '<div class="ny-doc-section">',
-          buildParsedBodyHtml(parsed.blocks, mode),
-          '</div>',
-          '<div class="ny-doc-signature">',
-          '<div><b>' + renderContentText(values.actPlace, mode) + '</b><br>' + renderContentText(values.actDate, mode) + '</div>',
-          '<div class="ny-doc-signature-block"><b>' + renderContentText(values.courtName, mode) + '</b><br>' + renderContentText(values.signatory, mode) + '</div>',
-          '</div>',
-          '</div>',
-          '<div class="ny-doc-footer">',
-          '<div class="ny-doc-footer-text">' + renderContentText(values.footerLabel, mode) + '</div>',
-          '<div class="ny-doc-footer-motto">' + renderContentText(values.footerMotto, mode) + '</div>',
-          '</div>',
-          '</div>'
-        ].join("\n");
+  /* ---- Тело документа → HTML ---- */
+
+  function bodyHtml(blocks) {
+    var h = "";
+    for (var i = 0; i < blocks.length; i++) {
+      var b = blocks[i];
+      if (b.type === "p") {
+        h += '<p class="ny-doc-paragraph ny-doc-section-text">' +
+             bb2html(b.text) + "</p>";
+      } else if (b.type === "sub") {
+        h += '<div class="ny-doc-subsection-title">' +
+             bb2html(b.text) + ":</div>";
+      } else if (b.type === "article") {
+        h += '<div class="ny-doc-article">' +
+             '<div class="ny-doc-article-number">Пункт ' +
+             escHtml(b.n) + "</div>" +
+             '<div class="ny-doc-article-body">' +
+             '<p class="ny-doc-paragraph ny-doc-article-text">' +
+             bb2html(b.text) + "</p>" +
+             "</div></div>";
       }
+    }
+    return h;
+  }
 
-      function buildFinalForumString(values) {
-        var fonts = get("templateFonts").innerHTML;
-        var style = get("templateStyle").innerHTML;
-        var fragment = renderMonolithFragment(values, "forum");
+  /* ---- Сборка HTML-фрагмента документа ---- */
 
-        return [
-          "[PARSEHTML]",
-          trim(fonts),
-          trim(style),
-          trim(fragment),
-          "[/PARSEHTML]"
-        ].join("\n");
-      }
+  function docFragment(v) {
+    var parsed = parseText(v.actText);
+    var hdr  = trim(parsed.hdr) || "РАЗДЕЛ ДОКУМЕНТА";
+    var seal = trim(v.sealUrl) ? v.sealUrl : DEFAULT_SEAL;
 
-      function buildLocalPreviewDocument(values) {
-        var fonts = get("templateFonts").innerHTML;
-        var style = get("templateStyle").innerHTML;
-        var fragment = renderMonolithFragment(values, "preview");
+    var panelCard = "";
+    if (trim(v.courtPanel)) {
+      panelCard =
+        '<div class="ny-doc-info-card">' +
+        '<div class="ny-doc-section-title">Состав суда / коллегии</div>' +
+        '<p class="ny-doc-paragraph ny-doc-section-text">' +
+        bb2html(v.courtPanel) + "</p></div>";
+    }
 
-        return [
-          "<!DOCTYPE html>",
-          "<html>",
-          "<head>",
-          '<meta charset="UTF-8">',
-          '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
-          trim(fonts),
-          trim(style),
-          "</head>",
-          '<body style="margin:0; padding:16px; background:#ECE9E2;">',
-          fragment,
-          "</body>",
-          "</html>"
-        ].join("\n");
-      }
+    return (
+      '<div class="ny-doc">' +
+        '<div class="ny-doc-header"><div class="ny-doc-header-content">' +
+          '<img class="ny-doc-seal" src="' + escAttr(seal) + '" alt="">' +
+          '<div class="ny-doc-pretitle">' + escHtml(v.courtName) + "</div>" +
+          '<div class="ny-doc-title">'    + escHtml(v.actType)   + "</div>" +
+          '<div class="ny-doc-subtitle">Case &#8470;&#160;' + escHtml(v.actNumber) + "</div>" +
+        "</div></div>" +
+        '<div class="ny-doc-stripe"></div>' +
+        '<div class="ny-doc-body">' +
+          '<div class="ny-doc-meta">' +
+            '<span class="ny-doc-meta-item"><b>Дело:</b> '   + escHtml(v.actNumber) + "</span>" +
+            '<span class="ny-doc-meta-item"><b>Дата:</b> '   + escHtml(v.actDate)   + "</span>" +
+            '<span class="ny-doc-meta-item"><b>Место:</b> '  + escHtml(v.actPlace)  + "</span>" +
+            '<span class="ny-doc-meta-item"><b>Статус:</b> ' + escHtml(v.actStatus) + "</span>" +
+          "</div>" +
+          panelCard +
+          '<div class="ny-doc-section-header">' +
+            '<div class="ny-doc-section-header-title">' + escHtml(hdr) + "</div>" +
+            '<div class="ny-doc-section-header-line"></div>' +
+          "</div>" +
+          '<div class="ny-doc-section">' + bodyHtml(parsed.blocks) + "</div>" +
+          '<div class="ny-doc-signature">' +
+            "<div><b>" + escHtml(v.actPlace) + "</b><br>" + escHtml(v.actDate) + "</div>" +
+            '<div class="ny-doc-signature-block"><b>' +
+            escHtml(v.courtName) + "</b><br>" + escHtml(v.signatory) + "</div>" +
+          "</div>" +
+        "</div>" +
+        '<div class="ny-doc-footer">' +
+          '<div class="ny-doc-footer-text">'  + escHtml(v.footerLabel) + "</div>" +
+          '<div class="ny-doc-footer-motto">' + escHtml(v.footerMotto) + "</div>" +
+        "</div>" +
+      "</div>"
+    );
+  }
 
-      /* ==========================================
-         Рендеринг во фрейм предпросмотра
-         ========================================== */
-      function updateIframePreview(html) {
-        var frame = elem.previewFrame;
-        try {
-          if ("srcdoc" in frame) {
-            frame.srcdoc = html;
-          } else {
-            var doc = frame.contentWindow || frame.contentDocument;
-            if (doc.document) { doc = doc.document; }
-            doc.open();
-            doc.write(html);
-            doc.close();
-          }
-        } catch (e) {
-          // Запасной вариант на случай строгой CORS/кокайн-политики браузера
-          try {
-            frame.src = "data:text/html;charset=utf-8," + encodeURIComponent(html);
-          } catch (e2) {
-            setStatus("Ошибка: предпросмотр заблокирован политиками безопасности вашей ОС.", "error");
-          }
-        }
-      }
+  /* ---- Итоговый форумный код ---- */
 
-      /* ==========================================
-         Браузерные действия кнопок
-         ========================================== */
-      function handleGenerate() {
-        var vals = getFormValues();
-        if (!validate(vals)) { return; }
+  function buildForumCode(v) {
+    var fonts = trim(E.tplFonts.textContent);
+    var style = trim(E.tplStyle.textContent);
+    var doc   = docFragment(v);
+    return "[PARSEHTML]\n" + fonts + "\n\n" + style + "\n\n" + doc + "\n[/PARSEHTML]";
+  }
 
-        var forumOut = buildFinalForumString(vals);
-        elem.outputCode.value = forumOut;
-        elem.outputCode.focus();
-        elem.outputCode.select();
-        setStatus("Итоговый HTML-код сгенерирован и выведен в нижнее поле.", "success");
-      }
+  /* ---- HTML для предпросмотра (iframe) ---- */
 
-      function handlePreview() {
-        var vals = getFormValues();
-        if (!validate(vals)) { return; }
+  function buildPreviewHtml(v) {
+    var fonts = trim(E.tplFonts.textContent);
+    var style = trim(E.tplStyle.textContent);
+    var doc   = docFragment(v);
+    return (
+      "<!DOCTYPE html><html lang=\"ru\"><head>" +
+      "<meta charset=\"UTF-8\">" +
+      "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">" +
+      fonts + style +
+      "<style>body{margin:0;padding:20px;background:#ECE9E2;}</style>" +
+      "</head><body>" + doc + "</body></html>"
+    );
+  }
 
-        var forumOut = buildFinalForumString(vals);
-        elem.outputCode.value = forumOut;
+  /* ---- Рендер iframe ---- */
 
-        var previewHtml = buildLocalPreviewDocument(vals);
-        updateIframePreview(previewHtml);
-        setStatus("Предпросмотр успешно обновлен.", "success");
-      }
+  function renderFrame(html) {
+    var f = E.previewFrame;
+    try {
+      if ("srcdoc" in f) { f.srcdoc = html; return; }
+    } catch (ex) {}
+    try {
+      var d = f.contentDocument ||
+              (f.contentWindow && f.contentWindow.document);
+      if (d) { d.open(); d.write(html); d.close(); return; }
+    } catch (ex) {}
+    try {
+      f.src = "data:text/html;charset=utf-8," + encodeURIComponent(html);
+    } catch (ex) {
+      setStatus("Предпросмотр заблокирован настройками браузера.", "error");
+    }
+  }
 
-      function handleCopy() {
-        var text = trim(elem.outputCode.value);
-        if (!text) {
-          var vals = getFormValues();
-          if (!validate(vals)) { return; }
-          text = buildFinalForumString(vals);
-          elem.outputCode.value = text;
-        }
+  /* ---- Получение значений формы ---- */
 
-        // Выделение текста
-        elem.outputCode.focus();
-        elem.outputCode.select();
+  function getValues() {
+    return {
+      actType:     E.actType.value,
+      actDate:     trim(E.actDate.value) || todayStr(),
+      actNumber:   E.actNumber.value,
+      actPlace:    E.actPlace.value,
+      courtName:   E.courtName.value,
+      courtPanel:  E.courtPanel.value,
+      signatory:   E.signatory.value,
+      actStatus:   E.actStatus.value,
+      sealUrl:     E.sealUrl.value,
+      footerLabel: E.footerLabel.value,
+      footerMotto: E.footerMotto.value,
+      actText:     E.actText.value
+    };
+  }
 
-        // Попытка записать в буфер
-        var copied = false;
-        if (navigator.clipboard && window.isSecureContext && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(
-            function () {
-              setStatus("Код успешно скопирован в буфер обмена!", "success");
-            },
-            function () {
-              fallbackCopy(text);
-            }
-          );
-        } else {
-          fallbackCopy(text);
-        }
-      }
+  function validate(v) {
+    if (!trim(v.actText)) {
+      setStatus("Ошибка: поле «Основной текст» не может быть пустым.", "error");
+      E.actText.focus();
+      return false;
+    }
+    return true;
+  }
 
-      function fallbackCopy(text) {
-        try {
-          var ta = document.createElement("textarea");
-          ta.value = text;
-          ta.style.position = "fixed";
-          ta.style.left = "-9999px";
-          document.body.appendChild(ta);
-          ta.focus();
-          ta.select();
-          var ok = document.execCommand("copy");
-          document.body.removeChild(ta);
-          if (ok) {
-            setStatus("Код скопирован в буфер обмена (через fallback)!", "success");
-          } else {
-            setStatus("Не удалось скопировать. Пожалуйста, скопируйте код вручную.", "error");
-          }
-        } catch (e) {
-          setStatus("Автокопирование недоступно. Скопируйте текст из поля вручную.", "error");
-        }
-      }
+  /* ---- Обработчики кнопок ---- */
 
-      // Безопасный запуск после загрузки структуры документа
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", init);
+  function onGenerate() {
+    var v = getValues();
+    if (!validate(v)) return;
+    var code = buildForumCode(v);
+    E.outputCode.value = code;
+    E.outputCode.focus();
+    E.outputCode.select();
+    setStatus("Код сгенерирован. Нажмите «Скопировать HTML-код» или скопируйте вручную.", "success");
+  }
+
+  function onPreview() {
+    var v = getValues();
+    if (!validate(v)) return;
+    E.outputCode.value = buildForumCode(v);
+    renderFrame(buildPreviewHtml(v));
+    setStatus("Предпросмотр обновлён.", "success");
+  }
+
+  function onCopy() {
+    if (!trim(E.outputCode.value)) {
+      var v = getValues();
+      if (!validate(v)) return;
+      E.outputCode.value = buildForumCode(v);
+    }
+    var text = E.outputCode.value;
+    E.outputCode.focus();
+    E.outputCode.select();
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(
+        function () { setStatus("Скопировано в буфер обмена!", "success"); },
+        function () { legacyCopy(text); }
+      );
+    } else {
+      legacyCopy(text);
+    }
+  }
+
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.cssText = "position:fixed;left:-9999px;top:0;opacity:0;";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      var ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      if (ok) {
+        setStatus("Скопировано (fallback-метод)!", "success");
       } else {
-        init();
+        setStatus("Автокопирование недоступно — скопируйте из поля вручную.", "error");
       }
+    } catch (ex) {
+      setStatus("Скопируйте текст из поля вручную.", "error");
+    }
+  }
 
-    })();
-  </script>
+  /* ---- Инициализация ---- */
+
+  function init() {
+    if (!trim(E.actDate.value)) {
+      E.actDate.value = todayStr();
+    }
+
+    if (!trim(E.actText.value)) {
+      E.actText.value =
+        "УСТАНОВИЛ И ПОСТАНОВИЛ:\n" +
+        "Судебная коллегия, исследовав материалы дела, пришла к выводу о соответствии " +
+        "требований заявителя действующему регламенту. " +
+        "BB-коды поддерживаются: [B]жирный[/B], [I]курсив[/I], [USER=142]Судья Смирнов[/USER].\n" +
+        "\n" +
+        "Рассмотрев доказательства сторон, суд определил следующий порядок исполнения:\n" +
+        "\n" +
+        "1. Признать требования заявителя правомерными и подлежащими удовлетворению в полном объёме.\n" +
+        "2. Направить настоящее решение всем заинтересованным лицам в установленный законом срок.\n" +
+        "3. Решение вступает в законную силу немедленно с момента оглашения и публикации.";
+    }
+
+    E.btnGenerate.onclick = onGenerate;
+    E.btnPreview.onclick  = onPreview;
+    E.btnCopy.onclick     = onCopy;
+    E.outputCode.onclick  = function () { this.focus(); this.select(); };
+
+    setStatus("Готов к работе. Нажмите «Предпросмотр» или «Сгенерировать».", "");
+    E.actText.focus();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+})();
+</script>
 </body>
 </html>
